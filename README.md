@@ -136,21 +136,37 @@ The computation times in the author's computer was as follows.
 
 (See also: [Official document of LIBSVM](https://www.csie.ntu.edu.tw/~cjlin/papers/libsvm.pdf) and [Official document of LIBLINEAR](https://www.csie.ntu.edu.tw/~cjlin/papers/liblinear.pdf))
 
-Suppose a linear prediction model for binary classifications, that is, given an outcome variable $y\in\{-1, +1\}$ and its explanatory variable $\boldsymbol{x}\in\mathbb{R}^k$, we would like to predict $y$ from $\boldsymbol{x}$ by a vector $\boldsymbol{\gamma}\in\mathbb{R}^k$ and a scalar called the **intercept** $b\in\mathbb{R}$ as
+Suppose a linear prediction model for binary classifications, that is, given an outcome variable $y\in\\\{-1, +1\\\}$ and its explanatory variable $\boldsymbol{x}\in\mathbb{R}^k$, we would like to predict $y$ from $\boldsymbol{x}$ by a vector $\boldsymbol{\gamma}\in\mathbb{R}^k$ and a scalar called the **intercept** $b\in\mathbb{R}$ as
 
 > $y\approx \mathrm{sign}(\boldsymbol{x}^\top\boldsymbol{\gamma} + b)$.
 
 Given a $n$-instance training dataset $[y_1, y_2, \dots, y_n] \in\mathbb{R}^n$ and $X\in\mathbb{R}^{n\times k}$ and instance weights $[w_1, w_2, \dots, w_n] \in\mathbb{R}_{\geq 0}^n$, we conduct the training of $\boldsymbol{\gamma}$ and $b$ as follows:
 
-> $\mathrm{argmin}_{\boldsymbol{\gamma}\in\mathbb{R}^d, b\in\mathbb{R}} C\sum_{i=1}^n w_i \ell(y_i, X_{i:}\boldsymbol{\gamma} + b) + \rho(\bm\gamma)$,
+> $\mathrm{argmin}\_{\boldsymbol{\gamma}\in\mathbb{R}^d, b\in\mathbb{R}} C\sum\_{i=1}^n w_i \ell(y\_i, X\_{i:}\boldsymbol{\gamma} + b) + \rho(\boldsymbol{\gamma})$,
 
-where $\ell: \mathbb{R}\times\mathbb{R}\to\mathbb{R}_{\geq 0}$ is a *loss function*, $\rho: \mathbb{R}^k\times\mathbb{R}\to\mathbb{R}_{\geq 0}$ is a *regularization function*, and $C>0$ is a hyperparameter to control the strength of the regularization.
+where $\ell: \mathbb{R}\times\mathbb{R}\to\mathbb{R}\_{\geq 0}$ is a *loss function*, $\rho: \mathbb{R}^k\times\mathbb{R}\to\mathbb{R}\_{\geq 0}$ is a *regularization function*, and $C>0$ is a hyperparameter to control the strength of the regularization.
 
-Here, we may use an alternative formulation. Let $d := k+1$, $\boldsymbol{\beta}\in\mathbb{R}^d$ and $\bar{X} := \begin{bmatrix} & X & \\\hdashline 1 & \cdots & 1 \end{bmatrix}\in\mathbb{R}^{n\times d}$. Then the training is conducted as
+Here, we may use an alternative formulation. Let $d := k+1$, $\boldsymbol{\beta}\in\mathbb{R}^d$ and
 
-> $\mathrm{argmin}_{\boldsymbol{\gamma}\in\mathbb{R}^d, b\in\mathbb{R}} C\sum_{i=1}^n w_i \ell(y_i, \bar{X}_{i:}\boldsymbol{\beta}) + \bar{\rho}(\boldsymbol{\beta})$.
+$$\bar{X} :=
+\begin{bmatrix}
+& X &
+\\\\\\hdashline
+1 & \cdots & 1
+\end{bmatrix}
+\in\mathbb{R}^{n\times d}.$$
+
+Then the training is conducted as
+
+> $\mathrm{argmin}\_{\boldsymbol{\gamma}\in\mathbb{R}^d, b\in\mathbb{R}} C\sum_{i=1}^n w\_i \ell(y\_i, \bar{X}_{i:}\boldsymbol{\beta}) + \bar{\rho}(\boldsymbol{\beta})$.
 
 Here, $\rho: \mathbb{R}^d\times\mathbb{R}\to\mathbb{R}_{\geq 0}$ is a regularization function for $d$-dimensional vector.
 
-From the first term, we can interpret that $\boldsymbol{\beta} \approx \begin{bmatrix} \boldsymbol{\gamma} \\ b \end{bmatrix}$, that is, the last element of $\boldsymbol{\beta}$ works as the intercept.  
+From the first term, we can interpret that
+
+$$\boldsymbol{\beta} \approx
+\begin{bmatrix} \boldsymbol{\gamma} \\\\ b
+\end{bmatrix},$$
+
+that is, the last element of $\boldsymbol{\beta}$ works as the intercept.  
 The difference of the formulation from the previous one is that **the penalty by the regularization function is imposed on whole $\boldsymbol{\beta}$, that is, also on the intercept**. In usual data analysis we do not impose the penalty on the intercept, but in our setup we need to impose the penalty on the intercept to quantify the change of the model parameters when a part of dataset values are removed or altered.
